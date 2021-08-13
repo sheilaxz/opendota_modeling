@@ -26,6 +26,8 @@ Thus, in this project, I presented a trial to build a model to predict the game 
 
 In fact, predicting the game result with only heroes would be difficult, as the heroes and characteristics in DotA2 are well-balanced (which is also why the game is popular). Besides the heroes, there would be many different factors that would impact how the game goes, and it is not likely that a specific hero combo would always win over others. However, it is possible to find some imbalance from the data exploration and modeling process, which would lead to meaningful and interesting findings.
 
+This work is also summarized in [a blog](https://shxz.medium.com/dota-2-can-i-win-the-game-with-the-heroes-picked-by-my-team-840cd6bd466d).
+
 
 ## 2. Tasks <a name="tasks"></a>
 
@@ -76,7 +78,21 @@ The features I used for modeling included: heroes, the primary attributes of the
 
 The dataset is firstly split into a training set (80% of the data) and a testing set (20% of the data). I use the training set to train the model (with cross-validation), and the test set to test the performance of the trained model. To train the model, I set an LGBM pipeline to train the model and test different parameters for the model.
 
-Results and discussions can also be found in the [report of this work](https://github.com/sheilaxz/opendota_modeling/blob/main/CapstoneProjectReport.pdf) and the ["Dota2_DataProcessing.ipynb."](https://github.com/sheilaxz/opendota_modeling/blob/main/Dota2_DataProcessing.ipynb)
+Results and discussions can also be found in the [report of this work](https://github.com/sheilaxz/opendota_modeling/blob/main/CapstoneProjectReport.pdf) and the ["Dota2_DataProcessing.ipynb."](https://github.com/sheilaxz/opendota_modeling/blob/main/Dota2_DataProcessing.ipynb) The performance (metric: AUC) of the trained model for the training set reaches 0.70076, while the AUC for the testing set is 0.60341. The AUC values for both training and testing sets show that the data/model has a certain degree of predictability for my model. 
+
+As expected, the model performance is poor if only using heroes selected to predict the game results. This is reasonable since a game result should not be purely determined by the players' heroes or how long the game lasts. However, the model may tell me some other information.  
+
+By taking a look at the feature importance of the model, it can be noticed that "Duration" has the highest importance score. As a feature that could interact and work together with all other features, I would believe duration may contribute the most to the predictive model.  
+
+It can also be noticed that almost all non-hero features have higher importance than hero features. While there seems no observable importance difference for hero roles, the "Strength" primary attribute seems to have higher importance than other primary attributes. However, this does not mean that the number of strength heroes itself would impact the game's result. The importance scores tell the predictive ability of variables in the model. It has no direct relationship with whether a single feature has a positive or negative effect on the game's result because the variables in the tree model all affect each other and play a role in the prediction.  But from the model, we might see that a balanced combination of roles or primary attributes would impact the game result more than certain heroes.  
+
+Let's then take a look at the hero features. Some heroes show higher importance than other heroes. These heroes are:  
+
+Anti-Mage, Luna,Orge Magi, Doom, Zeus, Drow Ranger, Templar Assassin, Silencer, Invoker, Spectre 
+
+Among these heroes, Hero Anti-Mage and Hero Luna appear at the forefront of the importance ranking for both teams, indicating that the role of these heroes in improving the predictive ability of the model is stable, regardless of whether they appear in the Radiant side or the Dire side.  
+
+Comparing the Dota Hero Meta Statistics for this month, we can see that Luna, Ogre Magi, Drow Ranger, Silencer, and Spectre are all heroes that are very commonly picked with high winning rates. Meanwhile, Invoker and Anti-mage are two heroes that are widely picked but with comparatively low winning rates. On the other hand, Doom, which has relatively high importance, has a low picking rate and a low winning rate. Even though we can not say that a single hero would definitely increase or decrease the winning probability, these statistics might reflect why they have a higher importance score in the model to some degree.
 
 
 
